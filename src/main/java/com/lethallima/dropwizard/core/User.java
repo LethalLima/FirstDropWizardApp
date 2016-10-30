@@ -1,6 +1,7 @@
 package com.lethallima.dropwizard.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -21,10 +22,12 @@ public class User {
 
     @Id
     @Column(name = "id", nullable = false)
+    @JsonProperty
     public int getId() {
         return id;
     }
 
+    @JsonIgnore
     public void setId(int id) {
         this.id = id;
     }
@@ -46,6 +49,7 @@ public class User {
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }

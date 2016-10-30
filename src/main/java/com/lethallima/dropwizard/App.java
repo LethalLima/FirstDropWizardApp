@@ -4,7 +4,6 @@ package com.lethallima.dropwizard;
 import com.lethallima.dropwizard.core.User;
 import com.lethallima.dropwizard.health.TemplateHealthCheck;
 import com.lethallima.dropwizard.jdbi.UserDAO;
-import com.lethallima.dropwizard.resources.HelloWorldResource;
 import com.lethallima.dropwizard.resources.HomeResource;
 import com.lethallima.dropwizard.resources.UserResource;
 import io.dropwizard.Application;
@@ -36,13 +35,7 @@ public class App extends Application<Config> {
         final UserDAO userDAO = new UserDAO(hibernateBundle.getSessionFactory());
         final UserResource userResource = new UserResource(userDAO);
 
-        final HelloWorldResource resource = new HelloWorldResource(
-                config.getTemplate(),
-                config.getDefaultName()
-        );
-
         environment.jersey().register(new HomeResource());
-        environment.jersey().register(resource);
         environment.jersey().register(userResource);
 
         final TemplateHealthCheck templateHealthCheck = new TemplateHealthCheck(

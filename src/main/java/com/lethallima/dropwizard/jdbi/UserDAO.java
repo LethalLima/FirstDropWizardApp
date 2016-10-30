@@ -19,7 +19,8 @@ public class UserDAO extends AbstractDAO<User> {
         return super.persist(user);
     }
 
+    @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {
-        return super.list(currentSession().createCriteria(User.class));
+        return super.criteria().list();
     }
 }
