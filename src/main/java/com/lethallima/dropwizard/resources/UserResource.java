@@ -2,6 +2,7 @@ package com.lethallima.dropwizard.resources;
 
 import com.lethallima.dropwizard.core.User;
 import com.lethallima.dropwizard.jdbi.UserDAO;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
 
@@ -28,14 +29,14 @@ public class UserResource {
     }
 
     @GET
-    @UnitOfWork(readOnly = true)
-    public List<User> getAllUsers() {
+    @UnitOfWork
+    public List<User> getAllUsers(@Auth User user) {
         return userDAO.getAllUsers();
     }
 
     @POST
     @UnitOfWork
-    public User createUser(User user) {
+    public User createUser(@Auth User user) {
         return userDAO.createUser(user);
     }
 }

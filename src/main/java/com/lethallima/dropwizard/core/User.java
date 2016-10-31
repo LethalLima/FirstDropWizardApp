@@ -8,17 +8,21 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.security.auth.Subject;
+import java.security.Principal;
 
 /**
  * Created by LethalLima on 10/29/16.
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Principal {
     private int id;
     private String username;
     private String password;
     private String email;
+    private String name;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -43,7 +47,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "password", nullable = false, length = 50)
+    @Column(name = "password", nullable = false, length = 60)
     @JsonIgnore // do not want to have password to be visible in the JSON
     public String getPassword() {
         return password;
@@ -62,5 +66,20 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Transient
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean implies(Subject subject) {
+        return false;
     }
 }
