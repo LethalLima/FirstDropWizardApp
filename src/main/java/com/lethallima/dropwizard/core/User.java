@@ -23,6 +23,8 @@ public class User implements Principal {
     private String password;
     private String email;
     private String name;
+    // temporary until roles are created on the DB
+    private String role = "User";
 
     @Id
     @Column(name = "id", nullable = false)
@@ -76,6 +78,15 @@ public class User implements Principal {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Transient
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.lethallima.dropwizard;
 
 
 import com.lethallima.dropwizard.auth.BCryptAuthenticator;
+import com.lethallima.dropwizard.auth.SimpleAuthorizer;
 import com.lethallima.dropwizard.core.User;
 import com.lethallima.dropwizard.health.TemplateHealthCheck;
 import com.lethallima.dropwizard.jdbi.UserDAO;
@@ -9,12 +10,14 @@ import com.lethallima.dropwizard.resources.HomeResource;
 import com.lethallima.dropwizard.resources.UserResource;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.UnitOfWorkAwareProxyFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 /**
  * Created by LethalLima on 10/26/16.
@@ -49,8 +52,11 @@ public class App extends Application<Config> {
         environment.jersey().register(userResource);
         environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
                 .setAuthenticator(bCryptAuth)
+                .setAuthorizer(new SimpleAuthorizer())
                 .setRealm("Auth Realm")
                 .buildAuthFilter()));
+        environment.jersey().register(RolesAllowedDynamicFeature.class);
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
 
         final TemplateHealthCheck templateHealthCheck = new TemplateHealthCheck(
                 config.getTemplate()

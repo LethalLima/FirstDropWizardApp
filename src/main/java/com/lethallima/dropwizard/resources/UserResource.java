@@ -2,10 +2,12 @@ package com.lethallima.dropwizard.resources;
 
 import com.lethallima.dropwizard.core.User;
 import com.lethallima.dropwizard.jdbi.UserDAO;
+import com.lethallima.dropwizard.utilities.Constants;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -30,12 +32,14 @@ public class UserResource {
 
     @GET
     @UnitOfWork
-    public List<User> getAllUsers(@Auth User user) {
+    @RolesAllowed(Constants.ADMIN_USER)
+    public List<User> getAllUsers() {
         return userDAO.getAllUsers();
     }
 
     @POST
     @UnitOfWork
+    @RolesAllowed(Constants.ADMIN_USER)
     public User createUser(@Auth User user) {
         return userDAO.createUser(user);
     }
